@@ -3,7 +3,7 @@ Bellow is a novel 'numba' based recreation of scikit learn decision tree algorit
 
 Install
 -------
->pip install git+https://github.com/pr38/socraticbumpsearch
+>pip install git+https://github.com/pr38/numbadecisiontrees
 
 Notes
 -------
