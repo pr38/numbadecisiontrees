@@ -1,6 +1,12 @@
 # numbadecisiontrees
 Bellow is a novel 'numba' based recreation of scikit learn decision tree algorithm. It contains the NBDecisionTreeClassifier and NBDecisionTreeRegressor classes, which should function like drop-ins for scikit-learn's DecisionTreeClassifier and DecisionTreeRegressor.
 
+Install
+-------
+>pip install git+https://github.com/pr38/socraticbumpsearch
+
+Notes
+-------
 
 Unlike Sklearn's decision tree, there is no support for multi-column prediction, missing values, sparse arrays, and random splitting. Some criterion and custom criterion are also not supported. But other features are supported; namely class_weights, sample_weights, impurity decrease stoppage, set number of leaf nodes and tree depth, sub-feature selection, minimal split, and minimal leaf sizes.
 
