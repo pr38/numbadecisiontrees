@@ -117,7 +117,7 @@ class BaseNBDecisionTree(BaseEstimator, metaclass=ABCMeta):
         if len(X) != len(y):
             raise ValueError("X and y must have the same number of samples")
 
-        if not (isinstance(X, np.array) and isinstance(X, np.array)):
+        if not (isinstance(X, np.ndarray) and isinstance(X, np.ndarray)):
             raise ValueError("X and y be dense arrays")
 
         if np.isnan(X).any() or np.isnan(y).any():
@@ -127,7 +127,7 @@ class BaseNBDecisionTree(BaseEstimator, metaclass=ABCMeta):
             raise ValueError("Estimator only works with numeric data")
 
     def check_predict_data_(self, X):
-        if not (isinstance(X, np.array)):
+        if not (isinstance(X, np.ndarray)):
             raise ValueError("X must be a dense array")
 
         if np.isnan(X).any():
