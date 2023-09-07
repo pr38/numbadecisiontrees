@@ -7,7 +7,6 @@ from ._criterion import (
     get_MSE_true_score,
     get_Entropy_true_score,
     get_Gini_true_score,
-    get_MSE_true_score,
 )
 
 from ._splitfinding import get_best_threshold_on_data
@@ -95,10 +94,10 @@ def process_node(
         or weighted_n_node_sample < 2 * min_weight_leaf
     )
 
-    if crit_code in [2, 3]:  # classification
+    if crit_code in [1, 2]:  # classification
         value = get_class_sum(y_examined, n_classes, weights_examined)
     else:  # regression
-        value = np.array([(y_examined * weights_examined).mean()])
+        value = np.array([np.average(y,weights=weights_examined)])
 
     is_leaf = is_leaf or impurity <= np.finfo(np.float64).eps
 
@@ -123,19 +122,16 @@ def process_node(
         )
 
         if crit_code == 1:
-            left_child_score = get_MSE_true_score(left_y)
-            right_child_score = get_MSE_true_score(right_y)
-        elif crit_code == 2:
             left_child_score = get_Entropy_true_score(left_y, n_classes, left_weights)
             right_child_score = get_Entropy_true_score(
                 right_y, n_classes, right_weights
             )
-        elif crit_code == 3:
+        elif crit_code == 2:
             left_child_score = get_Gini_true_score(left_y, n_classes, left_weights)
             right_child_score = get_Gini_true_score(right_y, n_classes, right_weights)
         else:  # crit_code == 0
-            left_child_score = get_MSE_true_score(left_y)
-            right_child_score = get_MSE_true_score(right_y)
+            left_child_score = get_MSE_true_score(left_y,weights_examined)
+            right_child_score = get_MSE_true_score(right_y,weights_examined)
 
         weighted_n_node_right_y = right_weights.sum()
         weighted_n_node_left_y = left_weights.sum()
@@ -275,10 +271,8 @@ def build_tree(
     values = []
 
     if crit_code == 1:
-        root_impurity = get_MSE_true_score(y)
-    elif crit_code == 2:
         root_impurity = get_Entropy_true_score(y, n_classes, weights)
-    elif crit_code == 3:
+    elif crit_code == 2:
         root_impurity = get_Gini_true_score(y, n_classes, weights)
     else:  # crit_code == 0
         root_impurity = get_MSE_true_score(y)

@@ -4,7 +4,6 @@ import numba as nb
 
 from ._utility import get_class_sum
 from ._criterion import (
-    get_MAE_proxy_impurity,
     get_Entropy_proxy_impurity,
     get_Gini_proxy_impurity,
     get_MSE_proxy_impurity,
@@ -48,7 +47,7 @@ def get_best_threshold_on_col(
 
     weighted_left_size = 0.0
 
-    if crit_code in [2, 3]:  # if crit is Gini or Entropy
+    if crit_code in [1, 2]:  # if crit is Gini or Entropy
         left_class_counts = np.zeros(n_classes)
     else:  # if crit is MSE or MAE
         left_sum = 0.0
@@ -60,7 +59,7 @@ def get_best_threshold_on_col(
 
         weighted_left_size += weight_y
 
-        if crit_code in [2, 3]:
+        if crit_code in [1, 2]:
             left_class_counts[int(value_y)] += weight_y
         else:
             left_sum += value_y
@@ -70,7 +69,7 @@ def get_best_threshold_on_col(
             right_size = n_rows - left_size
 
             if (left_size >= min_samples_leaf) and (right_size >= min_samples_leaf):
-                if crit_code in [2, 3]:
+                if crit_code in [1, 2]:
                     right_class_counts = y_totals - left_class_counts
                 else:
                     right_sum = y_totals[0] - left_sum
@@ -78,10 +77,6 @@ def get_best_threshold_on_col(
                 weighted_right_size = weights_total - weighted_left_size
 
                 if crit_code == 1:
-                    proxy_impurity = get_MAE_proxy_impurity(
-                        left_sum, right_sum, weighted_left_size, weighted_right_size
-                    )
-                elif crit_code == 2:
                     proxy_impurity = get_Entropy_proxy_impurity(
                         left_class_counts,
                         right_class_counts,
@@ -89,7 +84,7 @@ def get_best_threshold_on_col(
                         weighted_left_size,
                         weighted_right_size,
                     )
-                elif crit_code == 3:
+                elif crit_code == 2:
                     proxy_impurity = get_Gini_proxy_impurity(
                         left_class_counts,
                         right_class_counts,
@@ -135,7 +130,7 @@ def get_best_threshold_on_data(
     else:
         cols_to_examine = np.random.choice(n_cols, max_features, replace=False)
 
-    if crit_code in [2, 3]:
+    if crit_code in [1, 2]:
         y_sums = get_class_sum(y, n_classes, weights)
     else:
         y_sums = np.array(

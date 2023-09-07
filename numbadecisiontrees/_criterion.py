@@ -47,35 +47,13 @@ def get_Gini_true_score(y, n_classes, sample_weights):
 @njit(
     nb.float64(
         nb.types.Array(nb.float64, 1, "C", False, aligned=True),
-    )
-)
-def get_MSE_true_score(y):
-    mean = y.mean()
-
-    rss = 0.0
-
-    for y_i in y:
-        diff = y_i - mean
-        rss += diff * diff
-
-    return rss / len(y)
-
-
-@njit(
-    nb.float64(
         nb.types.Array(nb.float64, 1, "C", False, aligned=True),
     )
 )
-def get_MAE_true_score(y):
-    mean = y.mean()
+def get_MSE_true_score(y,sample_weight):
+    mean = np.average(y,weights=sample_weight)
 
-    rss = 0.0
-
-    for y_i in y:
-        diff = y_i - mean
-        rss += np.absolute(rss + diff)
-
-    return rss / len(y)
+    return np.sum(np.square(y - mean) * sample_weight)/sample_weight.sum()
 
 
 ###'inverse approximations'; ran durring split search, higher the value the better
@@ -90,14 +68,15 @@ def get_MSE_proxy_impurity(left_sum, right_sum, weighted_n_left, weighted_n_righ
         (right_sum * right_sum) / weighted_n_right
     )
 
-
 @njit(
     nb.float64(nb.float64, nb.float64, nb.float64, nb.float64),
     inline="always",
 )
-def get_MAE_proxy_impurity(left_sum, right_sum, weighted_n_left, weighted_n_right):
-    return (left_sum * weighted_n_left) + (right_sum * weighted_n_right)
+def get_FriedmanMSE_proxy_impurity(left_sum, right_sum, weighted_n_left, weighted_n_right):
 
+    diff = (weighted_n_right * left_sum -
+        weighted_n_left * right_sum)
+    return  diff * diff / (weighted_n_left * weighted_n_right)
 
 @njit(
     nb.float64(

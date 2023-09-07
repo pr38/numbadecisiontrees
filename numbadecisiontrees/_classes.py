@@ -16,7 +16,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin, is_clas
 from numbers import Integral
 from math import ceil
 
-from typing import Literal, Union, Optional
+from typing import Literal, Union, Optional,List,Dict
 
 
 def build_sk_Tree_class(
@@ -75,10 +75,9 @@ def prune_sk_Tree_class(tree, n_features, n_classes, ccp_alpha):
 
 CRIT_MAP = {
     "squared_error": 0,
-    "absolute_error": 1,
-    "entropy": 2,
-    "gini": 3,
-    "log_loss": 2,
+    "entropy": 1,
+    "gini": 2,
+    "log_loss": 1,
 }
 
 
@@ -333,11 +332,11 @@ class NBDecisionTreeClassifier(ClassifierMixin, BaseNBDecisionTree):
         min_samples_split: int = 2,
         min_samples_leaf: int = 1,
         min_weight_fraction_leaf: float = 0.0,
-        max_features: Optional[int] = None,
+        max_features: Union[None, int, float ,Literal["auto"], Literal["sqrt"], Literal["log2"] ] = None,
         random_state: Optional[int] = None,
         max_leaf_nodes: Optional[int] = None,
         min_impurity_decrease: float = 0.0,
-        class_weight=None,
+        class_weight:Union[List, List[Dict], Literal["balanced"]]=None,
         ccp_alpha: float = 0.0,
     ):
 
@@ -393,15 +392,13 @@ class NBDecisionTreeRegressor(RegressorMixin, BaseNBDecisionTree):
     def __init__(
         self,
         *,
-        criterion: Union[
-            Literal["squared_error"], Literal["absolute_error"]
-        ] = "squared_error",
+        criterion:Literal["squared_error"] = "squared_error",
         splitter: Literal["best"] = "best",
         max_depth: Optional[int] = None,
         min_samples_split: int = 2,
         min_samples_leaf: int = 1,
         min_weight_fraction_leaf: float = 0.0,
-        max_features: Optional[int] = None,
+        max_features: Union[None, int, float ,Literal["auto"], Literal["sqrt"], Literal["log2"] ] = None,
         random_state: Optional[int] = None,
         max_leaf_nodes: Optional[int] = None,
         min_impurity_decrease: float = 0.0,
@@ -409,9 +406,9 @@ class NBDecisionTreeRegressor(RegressorMixin, BaseNBDecisionTree):
     ):
 
         if isinstance(criterion, str):
-            if criterion not in ["squared_error", "absolute_error"]:
+            if criterion not in ["squared_error"]:
                 raise ValueError(
-                    """Only "squared_error" and "absolute_error" are supported """
+                    """Only "squared_error" is  supported """
                 )
         else:
             raise ValueError("criterion not properly set")
