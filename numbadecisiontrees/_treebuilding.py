@@ -275,7 +275,7 @@ def build_tree(
     elif crit_code == 2:
         root_impurity = get_Gini_true_score(y, n_classes, weights)
     else:  # crit_code == 0
-        root_impurity = get_MSE_true_score(y)
+        root_impurity = get_MSE_true_score(y,weights)
 
     to_build_stack = nb.typed.List()
 
