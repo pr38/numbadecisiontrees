@@ -227,9 +227,6 @@ class BaseNBDecisionTree(BaseEstimator, metaclass=ABCMeta):
 
         ccp_alpha = 0.0 if self.ccp_alpha is None else float(self.ccp_alpha)
 
-        if sample_weight is None:
-            sample_weight = np.ones(len(y))  # need to look at class weights as well
-
         n_classes = len(np.unique(y)) if is_classification else 1
         self.n_classes = n_classes
 
