@@ -130,8 +130,8 @@ def process_node(
             left_child_score = get_Gini_true_score(left_y, n_classes, left_weights)
             right_child_score = get_Gini_true_score(right_y, n_classes, right_weights)
         else:  # crit_code == 0
-            left_child_score = get_MSE_true_score(left_y,weights_examined)
-            right_child_score = get_MSE_true_score(right_y,weights_examined)
+            left_child_score = get_MSE_true_score(left_y,left_weights)
+            right_child_score = get_MSE_true_score(right_y,right_weights)
 
         weighted_n_node_right_y = right_weights.sum()
         weighted_n_node_left_y = left_weights.sum()
