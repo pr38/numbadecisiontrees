@@ -97,8 +97,8 @@ def process_node(
     if crit_code in [1, 2]:  # classification
         value = get_class_sum(y_examined, n_classes, weights_examined)
     else:  # regression
-        value = np.array([np.average(y_examined,weights=weights_examined)])
-
+        value = np.array([(y_examined * weights_examined).mean()])
+        
     is_leaf = is_leaf or impurity <= np.finfo(np.float64).eps
 
     if not is_leaf:
