@@ -62,7 +62,7 @@ def get_best_threshold_on_col(
         if crit_code in [1, 2]:
             left_class_counts[int(value_y)] += weight_y
         else:
-            left_sum += value_y
+            left_sum += (value_y * weight_y)
 
         if (value_col != col[row_index + 1]) and (value_col != last_value):
             left_size = row_index + 1
